@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUEtopia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6e6fa; /* Light purple background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-family: 'Potta One', cursive;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-family: 'Itim', cursive;
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #5e4c61; /* Color for subtitle */
+        }
+
+        .description {
+            margin: 15px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .main-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .get-started-button {
+            background-color: #3b2d3e; /* Darker background color */
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 66px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .get-started-button:hover {
+            background-color: #2a1e2b; /* Darker hover color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HUEtopia</h1>
+        <h2>Palette-izer</h2>
+        <p class="description">Welcome to HUEtopia, the accessibility app designed to enhance color perception.</p>
+        <img src="get started.png" alt="Let's Get Started" class="main-image"> <!-- Replace with your image path -->
+        <a href="2.html"><button class="get-started-button" onclick="startApp()">Get Started</button></a>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script>
+        function startApp() {
+            alert("Welcome to HUEtopia!");
+            // Redirect to the next page or perform further actions here
+            // window.location.href = 'signup.html'; // Uncomment if navigating to another page
+        }
+    </script>
+</body>
+</html>
