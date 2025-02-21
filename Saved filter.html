@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Filters</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Itim', cursive;
+      text-align: center;
+      background-color: #f3f2fc;
+    }
+    .filter-list {
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .filter-item {
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 15px;
+      font-size: 1rem;
+      color: white;
+      background-color: #5e4c61;
+      border: none;
+      border-radius: 66px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4d3c50;
+    }
+    /* Full-screen filter overlay */
+    .screen-filter {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: multiply;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Saved Filters</h1>
+  <div id="filterContainer" class="filter-list"></div>
+  <button onclick="clearFilters()">Clear All Filters</button>
+  <button onclick="window.location.href='index.html'">Back</button>
+
+  <!-- Screen filter overlay -->
+  <div id="screenFilter" class="screen-filter"></div>
+
+  <script>
+    function loadSavedFilters() {
+      let savedFilters = JSON.parse(localStorage.getItem('savedFilters')) || [];
+      const container = document.getElementById('filterContainer');
+      container.innerHTML = '';
+
+      if (savedFilters.length === 0) {
+        container.innerHTML = '<p>No saved filters yet.</p>';
+      } else {
+        savedFilters.forEach((filter, index) => {
+          container.innerHTML += `
+            <div class="filter-item">
+              <p><strong>Filter ${index + 1}</strong></p>
+              <p>Red: ${filter.red}, Green: ${filter.green}, Blue: ${filter.blue}, Yellow: ${filter.yellow}</p>
+              <p>Brightness: ${filter.brightness}, Saturation: ${filter.saturation}</p>
+              <button onclick="applyFilter(${index})">Apply</button>
+            </div>`;
+        });
+      }
+    }
+
+    function clearFilters() {
+      localStorage.removeItem('savedFilters');
+      loadSavedFilters();
+      removeScreenFilter();
+    }
+
+    function applyFilter(index) {
+      let savedFilters = JSON.parse(localStorage.getItem('savedFilters')) || [];
+      if (savedFilters[index]) {
+        localStorage.setItem('currentFilter', JSON.stringify(savedFilters[index]));
+        updateScreenFilter(savedFilters[index]);
+      }
+    }
+
+    function updateScreenFilter(filter) {
+      let screenFilter = document.getElementById('screenFilter');
+      let red = filter.red || 0;
+      let green = filter.green || 0;
+      let blue = filter.blue || 0;
+      let brightness = filter.brightness || 1;
+      let saturation = filter.saturation || 1;
+
+      // Convert the color properties into a CSS filter
+      screenFilter.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.3)`;
+      screenFilter.style.filter = `brightness(${brightness}) saturate(${saturation})`;
+    }
+
+    function removeScreenFilter() {
+      let screenFilter = document.getElementById('screenFilter');
+      screenFilter.style.backgroundColor = 'transparent';
+      screenFilter.style.filter = 'none';
+    }
+
+    // Load any previously applied filter
+    let currentFilter = JSON.parse(localStorage.getItem('currentFilter'));
+    if (currentFilter) {
+      updateScreenFilter(currentFilter);
+    }
+
+    loadSavedFilters();
+  </script>
+
+</body>
+</html>

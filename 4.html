@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&family=Potta+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #e6e6fa; /* Light purple background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            width: 100%;
+            background-color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: black; /* Changed color to black */
+            font-family: 'Potta One', cursive; /* Changed font to Potta One */
+        }
+        .header .logo {
+            width: 50px; /* Placeholder size for logo */
+            height: 50px; /* Placeholder size for logo */
+            position: absolute;
+            left: 15px;
+            top: 10px;
+        }
+        .welcome-message {
+            margin: 20px 0;
+            text-align: center;
+            font-size: 18px;
+            font-family: 'Itim', cursive; /* Changed font to Itim */
+        }
+        .options {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%; /* Responsive width */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .option {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Itim', cursive; /* Changed font to Itim */
+        }
+        .option:hover {
+            background-color: #f0f0f0; /* Light gray on hover */
+        }
+        .footer {
+            margin-top: auto;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            background-color: white;
+            border-top: 1px solid #ccc;
+        }
+        .footer a {
+            text-decoration: none;
+            color: #555;
+            font-size: 18px;
+        }
+        .footer .icon {
+            width: 24px; /* Placeholder size for icons */
+            height: 24px; /* Placeholder size for icons */
+        }
+        .option img, .option .icon {
+            width: 30px; /* Adjust image size for options */
+            height: 30px; /* Adjust image size for options */
+            vertical-align: middle; /* Align images with text */
+            margin-right: 10px; /* Space between image and text */
+        }
+        .black-icon {
+            color: black; /* Black color for icons */
+            font-size: 30px; /* Size for text-based icons */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="Hue.png" alt="Logo" class="logo"> <!-- Placeholder for logo -->
+        <h1>Home</h1> <!-- Header text -->
+    </div>
+    <div class="welcome-message">
+        <p>Welcome back!</p>
+        <p>Let’s enhance your color experience!</p>
+    </div>
+    <div class="options">
+        <div class="option" onclick="navigateTo('Saved filter.html')">
+            <img src="SAVED.png" alt="Color Adjustment"> Saved Filter
+        </div>
+        <div class="option" onclick="navigateTo('HUETopia AI.html')">
+            <img src="AI.png" alt="AI"> HUETopia AI
+        </div>
+        <div class="option" onclick="navigateTo('blue-yellow.html')">
+            <span class="black-icon">⚙️</span> Blue-yellow default
+        </div>
+        <div class="option" onclick="navigateTo('red-green.html')">
+            <span class="black-icon">⚙️</span> Red-Green default
+        </div>
+        <div class="option" onclick="navigateTo('camera.html')">
+            <img src="camera.png" alt="HUEtopia Camera"> HUEtopia Camera
+        </div>
+    </div>
+    <div class="footer">
+        <a href="4.html"><img src="home-agreement.png" alt="Home" class="icon"></a>
+        <a href="5.html"><img src="info.png" alt="Read" class="icon"></a>
+        <a href="6.html"><img src="user (1).png" alt="User" class="icon"></a>
+    </div>
+    <script src="firebase-config.js"></script>
+    <script>
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>

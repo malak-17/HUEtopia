@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6e6fa; /* Light purple background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-family: 'Potta One', cursive;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            margin: 15px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .sign-in-button {
+            background-color: #3b2d3e; /* Darker background color */
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 66px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .sign-in-button:hover {
+            background-color: #2a1e2b; /* Darker hover color */
+        }
+
+        .forgot-password {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .sign-up-link {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #5e4c61;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome!</h1>
+        <p class="description">Sign In</p>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <div class="forgot-password">
+            <a href="#">Forgot Password?</a>
+        </div>
+        <a href="4.html"><button class="sign-in-button" onclick="signIn()">Sign In</button></a>
+        <p class="sign-up-link">Didn't have an account? <a href="2.html">Sign Up</a></p>
+    </div>
+    <script src="firebase-config.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>

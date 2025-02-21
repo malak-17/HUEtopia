@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&family=Potta+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            width: 100%;
+            background-color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .header .profile-pic {
+            width: 60px;
+            height: 60px;
+            background-color: lightgray;
+            border-radius: 50%;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .header h2 {
+            margin: 10px 0 0 0;
+            font-family: 'Potta One', cursive;
+            font-size: 24px;
+        }
+        .options-container {
+            width: 90%;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .option img {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+        }
+        .option p {
+            margin: 0;
+            font-family: 'Itim', cursive;
+            font-size: 18px;
+        }
+        .footer {
+            margin-top: auto;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            background-color: white;
+            border-top: 1px solid #ccc;
+        }
+        .footer a {
+            text-decoration: none;
+            color: #555;
+            font-size: 18px;
+        }
+        .footer .icon {
+            width: 24px; /* Placeholder size for icons */
+            height: 24px; /* Placeholder size for icons */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="profile-pic"></div> <!-- Placeholder for profile picture -->
+        <h2>Name</h2>
+    </div>
+    <div class="options-container">
+        <div class="option">
+            <img src="language.png" alt="Language Icon"> <!-- Placeholder for language icon -->
+            <p>Languages</p>
+        </div>
+        <div class="option">
+            <img src="settings.png" alt="Settings Icon"> <!-- Placeholder for settings icon -->
+            <p>Settings</p>
+        </div>
+        <div class="option">
+            <img src="logout.png" alt="Logout Icon"> <!-- Placeholder for logout icon -->
+            <p>Log Out</p>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="4.html"><img src="home-agreement.png" alt="Home" class="icon"></a> <!-- Placeholder for home icon -->
+        <a href="5.html"><img src="info.png" alt="Info" class="icon"></a> <!-- Placeholder for info icon -->
+        <a href="6.html"><img src="user (1).png" alt="User" class="icon"></a> <!-- Placeholder for user icon -->
+    </div>
+    <script src="firebase-config.js"></script>
+</body>
+</html>

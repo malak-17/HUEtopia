@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUEtopia - Color Accessibility Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Itim', cursive;
+      text-align: center;
+      background-color: #f3f2fc;
+    }
+
+    #controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 20px auto;
+      max-width: 90%;
+      padding: 10px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      text-align: center;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    select {
+      padding: 10px;
+      border-radius: 66px;
+      border: none;
+      background-color: #5e4c61;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .side-by-side {
+      width: 45%;
+      position: relative;
+    }
+
+    video, canvas {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      color: white;
+      background-color: #5e4c61;
+      border: none;
+      border-radius: 66px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    button:hover {
+      background-color: #4d3c50;
+    }
+  </style>
+</head>
+<body>
+  <h1>HUEtopia - Color Accessibility Tool</h1>
+
+  <div id="controls">
+    <select id="cameraSelect">
+      <option value="user">Front Camera</option>
+      <option value="environment">Rear Camera</option>
+    </select>
+    <div class="control-group">
+      <label>Red</label>
+      <input type="number" id="redInput" min="0" max="2" step="0.1" value="1">
+    </div>
+    <div class="control-group">
+      <label>Green</label>
+      <input type="number" id="greenInput" min="0" max="2" step="0.1" value="1">
+    </div>
+    <div class="control-group">
+      <label>Blue</label>
+      <input type="number" id="blueInput" min="0" max="2" step="0.1" value="1">
+    </div>
+    <div class="control-group">
+      <label>Yellow</label>
+      <input type="number" id="yellowInput" min="0" max="2" step="0.1" value="1">
+    </div>
+    <div class="control-group">
+      <label>Brightness</label>
+      <input type="number" id="brightnessInput" min="0.5" max="2" step="0.1" value="1">
+    </div>
+    <div class="control-group">
+      <label>Saturation</label>
+      <input type="number" id="saturationInput" min="0" max="2" step="0.1" value="1">
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="side-by-side">
+      <h2>Original</h2>
+      <video id="video" autoplay playsinline muted></video>
+    </div>
+    <div class="side-by-side">
+      <h2>Filtered</h2>
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <button id="saveFilters">Save Filter</button>
+  <button id="resetFilters">Restart</button>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const cameraSelect = document.getElementById('cameraSelect');
+
+    let currentStream;
+
+    function startCamera(facingMode = 'user') {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+
+      navigator.mediaDevices.getUserMedia({
+        video: { facingMode: facingMode }
+      })
+      .then(stream => {
+        currentStream = stream;
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          requestAnimationFrame(applyFilter);
+        };
+      })
+      .catch(err => console.error("Error accessing camera: ", err));
+    }
+
+    // Apply filter
+    function applyFilter() {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+
+      const redFactor = parseFloat(document.getElementById('redInput').value);
+      const greenFactor = parseFloat(document.getElementById('greenInput').value);
+      const blueFactor = parseFloat(document.getElementById('blueInput').value);
+      const yellowFactor = parseFloat(document.getElementById('yellowInput').value);
+      const brightness = parseFloat(document.getElementById('brightnessInput').value);
+      const saturation = parseFloat(document.getElementById('saturationInput').value);
+
+      for (let i = 0; i < data.length; i += 4) {
+        let r = data[i] * redFactor;
+        let g = data[i + 1] * greenFactor;
+        let b = data[i + 2] * blueFactor;
+
+        // Apply yellow filter adjustment
+        const yellow = ((r + g) / 2) * yellowFactor;
+        r += yellow;
+        g += yellow;
+
+        // Brightness and saturation adjustments
+        const avg = (r + g + b) / 3;
+        r = avg + (r - avg) * saturation;
+        g = avg + (g - avg) * saturation;
+        b = avg + (b - avg) * saturation;
+
+        data[i] = Math.min(255, r * brightness);
+        data[i + 1] = Math.min(255, g * brightness);
+        data[i + 2] = Math.min(255, b * brightness);
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      requestAnimationFrame(applyFilter);
+    }
+
+    // Event listener for camera switch
+    cameraSelect.addEventListener('change', () => {
+      startCamera(cameraSelect.value);
+    });
+
+    // Save filter settings
+    document.getElementById('saveFilters').addEventListener('click', () => {
+      const filters = {
+        red: document.getElementById('redInput').value,
+        green: document.getElementById('greenInput').value,
+        blue: document.getElementById('blueInput').value,
+        yellow: document.getElementById('yellowInput').value,
+        brightness: document.getElementById('brightnessInput').value,
+        saturation: document.getElementById('saturationInput').value
+      };
+
+      // Retrieve existing filters or create a new array
+      let savedFilters = JSON.parse(localStorage.getItem('savedFilters')) || [];
+      savedFilters.push(filters); // Add the new filter to the array
+      localStorage.setItem('savedFilters', JSON.stringify(savedFilters)); // Save the array back to localStorage
+      alert('Filter saved!');
+    });
+
+    // Reset filters to default
+    document.getElementById('resetFilters').addEventListener('click', () => {
+      document.getElementById('redInput').value = 1;
+      document.getElementById('greenInput').value = 1;
+      document.getElementById('blueInput').value = 1;
+      document.getElementById('yellowInput').value = 1;
+      document.getElementById('brightnessInput').value = 1;
+      document.getElementById('saturationInput').value = 1;
+      alert('Filters reset to default!');
+    });
+
+    // Start with default front camera
+    startCamera();
+  </script>
+  
+</body>
+</html>
