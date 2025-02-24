@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -118,6 +118,16 @@
       <label>Saturation</label>
       <input type="number" id="saturationInput" min="0" max="2" step="0.1" value="1">
     </div>
+    <!-- Added Opacity Control -->
+    <div class="control-group">
+      <label>Opacity</label>
+      <input type="number" id="opacityInput" min="0" max="1" step="0.1" value="1">
+    </div>
+    <!-- Added Vibrancy Control -->
+    <div class="control-group">
+      <label>Vibrancy</label>
+      <input type="number" id="vibrancyInput" min="0" max="2" step="0.1" value="1">
+    </div>
   </div>
 
   <div class="container">
@@ -174,6 +184,9 @@
       const yellowFactor = parseFloat(document.getElementById('yellowInput').value);
       const brightness = parseFloat(document.getElementById('brightnessInput').value);
       const saturation = parseFloat(document.getElementById('saturationInput').value);
+      // Added opacity and vibrancy variables
+      const opacity = parseFloat(document.getElementById('opacityInput').value);
+      const vibrancy = parseFloat(document.getElementById('vibrancyInput').value);
 
       for (let i = 0; i < data.length; i += 4) {
         let r = data[i] * redFactor;
@@ -191,9 +204,16 @@
         g = avg + (g - avg) * saturation;
         b = avg + (b - avg) * saturation;
 
+        // Apply vibrancy adjustment
+        const avgColor = (r + g + b) / 3;
+        r = avgColor + (r - avgColor) * vibrancy;
+        g = avgColor + (g - avgColor) * vibrancy;
+        b = avgColor + (b - avgColor) * vibrancy;
+
         data[i] = Math.min(255, r * brightness);
         data[i + 1] = Math.min(255, g * brightness);
         data[i + 2] = Math.min(255, b * brightness);
+        data[i + 3] = 255 * opacity;
       }
 
       ctx.putImageData(imageData, 0, 0);
@@ -213,7 +233,9 @@
         blue: document.getElementById('blueInput').value,
         yellow: document.getElementById('yellowInput').value,
         brightness: document.getElementById('brightnessInput').value,
-        saturation: document.getElementById('saturationInput').value
+        saturation: document.getElementById('saturationInput').value,
+        opacity: document.getElementById('opacityInput').value,
+        vibrancy: document.getElementById('vibrancyInput').value
       };
 
       // Retrieve existing filters or create a new array
@@ -231,6 +253,8 @@
       document.getElementById('yellowInput').value = 1;
       document.getElementById('brightnessInput').value = 1;
       document.getElementById('saturationInput').value = 1;
+      document.getElementById('opacityInput').value = 1;
+      document.getElementById('vibrancyInput').value = 1;
       alert('Filters reset to default!');
     });
 
