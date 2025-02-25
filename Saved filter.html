@@ -46,6 +46,13 @@
       pointer-events: none;
       z-index: 9999;
       mix-blend-mode: multiply;
+      background-color: rgba(255, 153, 0, 0.2);
+    }
+    .controls {
+      margin-top: 15px;
+    }
+    .slider-container {
+      margin: 10px 0;
     }
   </style>
 </head>
@@ -53,74 +60,107 @@
 
   <h1>Saved Filters</h1>
   <div id="filterContainer" class="filter-list"></div>
+  
   <button onclick="clearFilters()">Clear All Filters</button>
+  <button onclick="enableEyeCareMode()">Enable Eye Care Mode</button>
+  <button onclick="disableEyeCareMode()">Disable Eye Care Mode</button>
   <button onclick="window.location.href='index.html'">Back</button>
 
-  <!-- Screen filter overlay -->
+  <!-- Overlay for screen-wide filter -->
   <div id="screenFilter" class="screen-filter"></div>
 
-  <script>
-    function loadSavedFilters() {
-      let savedFilters = JSON.parse(localStorage.getItem('savedFilters')) || [];
-      const container = document.getElementById('filterContainer');
-      container.innerHTML = '';
+  <!-- Adjustment Sliders -->
+  <div class="controls">
+    <h3>Adjust Filter</h3>
+    <div class="slider-container">
+      <label>Brightness</label>
+      <input type="range" id="brightnessSlider" min="0.5" max="1.5" step="0.1" value="1">
+    </div>
+    <div class="slider-container">
+      <label>Saturation</label>
+      <input type="range" id="saturationSlider" min="0.5" max="1.5" step="0.1" value="1">
+    </div>
+    <div class="slider-container">
+      <label>Red</label>
+      <input type="range" id="redSlider" min="0" max="255" value="255">
+    </div>
+    <div class="slider-container">
+      <label>Green</label>
+      <input type="range" id="greenSlider" min="0" max="255" value="153">
+    </div>
+    <div class="slider-container">
+      <label>Blue</label>
+      <input type="range" id="blueSlider" min="0" max="255" value="0">
+    </div>
+  </div>
 
-      if (savedFilters.length === 0) {
-        container.innerHTML = '<p>No saved filters yet.</p>';
-      } else {
-        savedFilters.forEach((filter, index) => {
-          container.innerHTML += `
-            <div class="filter-item">
-              <p><strong>Filter ${index + 1}</strong></p>
-              <p>Red: ${filter.red}, Green: ${filter.green}, Blue: ${filter.blue}, Yellow: ${filter.yellow}</p>
-              <p>Brightness: ${filter.brightness}, Saturation: ${filter.saturation}</p>
-              <button onclick="applyFilter(${index})">Apply</button>
-            </div>`;
-        });
-      }
+<script>
+  function applyFilter(index) {
+    let savedFilters = JSON.parse(localStorage.getItem('savedFilters')) || [];
+    if (savedFilters[index]) {
+      localStorage.setItem('currentFilter', JSON.stringify(savedFilters[index]));
+      updateScreenFilter(savedFilters[index]);
     }
+  }
 
-    function clearFilters() {
-      localStorage.removeItem('savedFilters');
-      loadSavedFilters();
-      removeScreenFilter();
-    }
+  function updateScreenFilter(filter) {
+    let screenFilter = document.getElementById('screenFilter');
+    const red = filter.red || 255;
+    const green = filter.green || 153;
+    const blue = filter.blue || 0;
+    const brightness = filter.brightness || 1;
+    const saturation = filter.saturation || 1;
 
-    function applyFilter(index) {
-      let savedFilters = JSON.parse(localStorage.getItem('savedFilters')) || [];
-      if (savedFilters[index]) {
-        localStorage.setItem('currentFilter', JSON.stringify(savedFilters[index]));
-        updateScreenFilter(savedFilters[index]);
-      }
-    }
+    screenFilter.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.3)`;
+    screenFilter.style.filter = `brightness(${brightness}) saturate(${saturation})`;
 
-    function updateScreenFilter(filter) {
-      let screenFilter = document.getElementById('screenFilter');
-      let red = filter.red || 0;
-      let green = filter.green || 0;
-      let blue = filter.blue || 0;
-      let brightness = filter.brightness || 1;
-      let saturation = filter.saturation || 1;
+    localStorage.setItem('activeFilter', JSON.stringify(filter));
+  }
 
-      // Convert the color properties into a CSS filter
-      screenFilter.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.3)`;
-      screenFilter.style.filter = `brightness(${brightness}) saturate(${saturation})`;
-    }
+  function enableEyeCareMode() {
+    let eyeCareFilter = {
+      red: 255,
+      green: 153,
+      blue: 0,
+      brightness: 1,
+      saturation: 1
+    };
+    localStorage.setItem('activeFilter', JSON.stringify(eyeCareFilter));
+    updateScreenFilter(eyeCareFilter);
+    alert("Eye Care Mode Enabled");
+  }
 
-    function removeScreenFilter() {
-      let screenFilter = document.getElementById('screenFilter');
-      screenFilter.style.backgroundColor = 'transparent';
-      screenFilter.style.filter = 'none';
-    }
+  function disableEyeCareMode() {
+    let screenFilter = document.getElementById('screenFilter');
+    screenFilter.style.backgroundColor = "transparent";
+    screenFilter.style.filter = "none";
+    localStorage.removeItem('activeFilter');
+    alert("Eye Care Mode Disabled");
+  }
 
-    // Load any previously applied filter
-    let currentFilter = JSON.parse(localStorage.getItem('currentFilter'));
-    if (currentFilter) {
-      updateScreenFilter(currentFilter);
-    }
+  function updateSliderValues() {
+    let filter = {
+      brightness: parseFloat(document.getElementById('brightnessSlider').value),
+      saturation: parseFloat(document.getElementById('saturationSlider').value),
+      red: parseInt(document.getElementById('redSlider').value),
+      green: parseInt(document.getElementById('greenSlider').value),
+      blue: parseInt(document.getElementById('blueSlider').value)
+    };
 
-    loadSavedFilters();
-  </script>
+    updateScreenFilter(filter);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    let currentFilter = JSON.parse(localStorage.getItem('activeFilter'));
+    if (currentFilter) updateScreenFilter(currentFilter);
+
+    document.getElementById('brightnessSlider').addEventListener('input', updateSliderValues);
+    document.getElementById('saturationSlider').addEventListener('input', updateSliderValues);
+    document.getElementById('redSlider').addEventListener('input', updateSliderValues);
+    document.getElementById('greenSlider').addEventListener('input', updateSliderValues);
+    document.getElementById('blueSlider').addEventListener('input', updateSliderValues);
+  });
+</script>
 
 </body>
 </html>
